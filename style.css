@@ -5,7 +5,6 @@ body:has(> * > .world) {
 }
 
 .world {
-    background: #20883f;
 	position: absolute;
 
 	top: 50vh;

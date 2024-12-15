@@ -5,6 +5,7 @@ import Browser.Events
 import Game.Config as Config
 import Game.Engine as Engine
 import Html exposing (Html)
+import Html.Attributes
 import Random
 
 
@@ -168,9 +169,11 @@ move dir ( x, y ) =
         Right ->
             ( x + 1, y )
 
+
 moveTwice : Direction -> Point -> Point
 moveTwice dir point =
     move dir (move dir point)
+
 
 invertDirection : Direction -> Direction
 invertDirection direction =
@@ -218,9 +221,28 @@ view : Model -> Html Msg
 view model =
     Engine.renderWorld <|
         List.concat
-            [ [ viewPlayer model.player ]
-            , viewOrbs model.orbs
+            [ viewPlatformTilesSpecific -- Render background tiles
+            , [ viewPlayer model.player ] -- Render player
+            , viewOrbs model.orbs -- Render orbs
             ]
+
+
+viewPlatformTilesSpecific : List (Html msg)
+-- ! Work in progress. The tiles are not spaced the same as the other sprites I think. 
+viewPlatformTilesSpecific =
+    [ Engine.renderSprite "./assets/sprout-lands/Tilesets/Hills-modified.png" False ( 0, 0 ) ( 0, Config.worldHeight - 1 )
+    , Engine.renderSprite "./assets/sprout-lands/Tilesets/Hills-modified.png" False ( 1, 0 ) ( Config.worldWidth - 1, Config.worldHeight - 1 )
+    , Engine.renderSprite "./assets/sprout-lands/Tilesets/Hills-modified.png" False ( 1, 2 ) ( Config.worldWidth - 1, 0 )
+    , Engine.renderSprite "./assets/sprout-lands/Tilesets/Hills-modified.png" False ( 0, 0 ) ( 0, 0 )
+    ]
+
+
+
+-- viewPlatformTiles
+--     [ { x = 0, y = 0, width = 32, height = 32, sourceX = 0, sourceY = 0 }
+--     , { x = 32, y = 0, width = 32, height = 32, sourceX = 32, sourceY = 0 }
+--     , { x = 0, y = 32, width = 32, height = 32, sourceX = 0, sourceY = 32 }
+--     ]
 
 
 viewPlayer : Player -> Html msg
@@ -250,3 +272,52 @@ viewOrbs boxes =
             Engine.renderSprite "./assets/orb.png" False ( 0, 0 )
     in
     List.map f boxes
+
+
+
+-- Define the tile structure
+
+
+type alias Tile =
+    { x : Int -- Tile's X position in pixels
+    , y : Int -- Tile's Y position in pixels
+    , width : Int
+    , height : Int
+    , sourceX : Int -- X offset in the tileset
+    , sourceY : Int -- Y offset in the tileset
+    }
+
+
+
+-- Function to render a single tile as a div
+
+
+viewPlatformTile : Tile -> Html msg
+viewPlatformTile tile =
+    Html.div
+        [ Html.Attributes.style "position" "absolute"
+        , Html.Attributes.style "left" (String.fromInt tile.x ++ "px")
+        , Html.Attributes.style "top" (String.fromInt tile.y ++ "px")
+        , Html.Attributes.style "width" (String.fromInt tile.width ++ "px")
+        , Html.Attributes.style "height" (String.fromInt tile.height ++ "px")
+        , Html.Attributes.style "background-image" "url('./assets/sprout-lands/Tilesets/Hills-modified.png')" -- Path to the tileset
+        , Html.Attributes.style "background-position"
+            ("-"
+                ++ String.fromInt tile.sourceX
+                ++ "px "
+                ++ "-"
+                ++ String.fromInt tile.sourceY
+                ++ "px"
+            )
+        , Html.Attributes.style "background-repeat" "no-repeat"
+        ]
+        []
+
+
+
+-- Function to render a list of tiles
+
+
+viewPlatformTiles : List Tile -> List (Html msg)
+viewPlatformTiles tiles =
+    List.map viewPlatformTile tiles
