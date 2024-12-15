@@ -1,15 +1,11 @@
 body:has(> * > .world) {
-	background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-		url('assets/cobblestone.png');
-	background-size: cover;
-	background-position: center;
-	background-size: 3%;
+    background: #247ba3;
 	height: 100%;
 	overflow: hidden;
 }
 
 .world {
-    background: #161616;
+    background: #20883f;
 	position: absolute;
 
 	top: 50vh;
