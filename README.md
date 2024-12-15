@@ -16,6 +16,7 @@ Continued development of a game demo for a live coding session at Halmstad Funct
 - https://diogo-vernier.itch.io/animated-character-16-x-16
 - https://pebonius.itch.io/surtizens
 - https://mineblocks.com/1/wiki/index.php?title=File:Cobblestone.png (to remove)
+- https://cupnooble.itch.io/sprout-lands-asset-pack
 
 ## Ideas
 
